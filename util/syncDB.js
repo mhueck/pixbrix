@@ -1,7 +1,7 @@
 var async = require('async');
 var fs = require('fs');
 var db = require('./db');
-var gm = require('gm'); //.subClass({imageMagick: true});
+var gm = require('gm').subClass({imageMagick: true});
 var picsDir = process.env.PICS_DIR;
 
 function isPic(filename) {

@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://nostromo/pics');
+mongoose.connect('mongodb://localhost/pics');
 
 // auth token
 var imageDataSchema = mongoose.Schema({
