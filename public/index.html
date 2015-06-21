@@ -115,6 +115,7 @@ function show(path) {
     .done(function(data, textStatus, jqXHR) {
         $('#pics').html(render(window.innerWidth-15-getScrollbarWidth(), jqXHR.responseJSON, window.outerWidth/window.outerHeight));
         initSlideShow();
+        window.scrollTo(0, 0);
     });
 }
 
