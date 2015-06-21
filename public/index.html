@@ -1,0 +1,153 @@
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="/js/jquery.mmenu.min.all.js" type="text/javascript"></script>
+  <script src="/index.js" type="text/javascript"></script>
+  <script src="/js/jquery.fullscreenslides.js"></script>
+  <link href="/css/jquery.mmenu.all.css" type="text/css" rel="stylesheet" />
+  <link href="/css/fullscreenstyle.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $.ajax({url: '/tree',
+        async: 'false',
+        dataType: 'json'
+    })
+    .done(function(data, textStatus, jqXHR) {
+		var menu = drawTree(createTree(jqXHR.responseJSON));
+        $('#my-menu').html(menu);
+        $("#my-menu").mmenu({
+           onClick: {
+             blockUI: true,
+             close: true
+           },
+           // configuration
+           offCanvas: {
+             zposition: "front"
+           //   pageNodetype: "section"
+           
+        }});
+    });
+  });
+  </script>
+
+
+
+
+
+
+<script>
+//  $(function(){
+function initSlideShow() {
+  var $container = $('#fullscreenSlideshowContainer');
+  if ($container.length > 0) {
+    $container.remove();
+  }
+  // initialize the slideshow
+  $('.slide').fullscreenslides();
+  
+  // All events are bound to this container element
+  $container = $('#fullscreenSlideshowContainer');
+  
+  $container
+    //This is triggered once:
+    .bind("init", function() {
+
+      // The slideshow does not provide its own UI, so add your own
+      // check the fullscreenstyle.css for corresponding styles
+      $container
+        .append('<div class="ui" id="fs-close">&times;</div>')
+        .append('<div class="ui" id="fs-loader">Loading...</div>')
+        .append('<div class="ui" id="fs-prev">&lt;</div>')
+        .append('<div class="ui" id="fs-next">&gt;</div>')
+        .append('<div class="ui" id="fs-caption"><span></span></div>');
+      
+      // Bind to the ui elements and trigger slideshow events
+      $('#fs-prev').click(function(){
+        // You can trigger the transition to the previous slide
+        $container.trigger("prevSlide");
+      });
+      $('#fs-next').click(function(){
+        // You can trigger the transition to the next slide
+        $container.trigger("nextSlide");
+      });
+      $('#fs-close').click(function(){
+        // You can close the slide show like this:
+        $container.trigger("close");
+      });
+      
+    })
+    // When a slide starts to load this is called
+    .bind("startLoading", function() {
+      // show spinner
+      $('#fs-loader').show();
+    })
+    // When a slide stops to load this is called:
+    .bind("stopLoading", function() {
+      // hide spinner
+      $('#fs-loader').hide();
+    })
+    // When a slide is shown this is called.
+    // The "loading" events are triggered only once per slide.
+    // The "start" and "end" events are called every time.
+    // Notice the "slide" argument:
+    .bind("startOfSlide", function(event, slide) {
+      // set and show caption
+      $('#fs-caption span').text(slide.title);
+      $('#fs-caption').show();
+    })
+    // before a slide is hidden this is called:
+    .bind("endOfSlide", function(event, slide) {
+      $('#fs-caption').hide();
+    });
+}
+ </script>
+</head>
+
+
+<body>
+<script>
+
+function show(path) {
+    $.ajax({url: '/browse/'+path,
+        async: 'false',
+        dataType: 'json'
+    })
+    .done(function(data, textStatus, jqXHR) {
+        $('#pics').html(render(window.innerWidth-15-getScrollbarWidth(), jqXHR.responseJSON, window.outerWidth/window.outerHeight));
+        initSlideShow();
+    });
+}
+
+function getScrollbarWidth() {
+    var outer = document.createElement("div");
+    outer.style.visibility = "hidden";
+    outer.style.width = "100px";
+    outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+    document.body.appendChild(outer);
+
+    var widthNoScroll = outer.offsetWidth;
+    // force scrollbars
+    outer.style.overflow = "scroll";
+
+    // add innerdiv
+    var inner = document.createElement("div");
+    inner.style.width = "100%";
+    outer.appendChild(inner);
+
+    var widthWithScroll = inner.offsetWidth;
+
+    // remove divs
+    outer.parentNode.removeChild(outer);
+
+    return widthNoScroll - widthWithScroll;
+}
+</script>
+  <nav id="my-menu">
+  </nav>
+
+  <div>
+    <a href="#my-menu"><img src="/images/menu-alt-512.png" alt="menu" style="z-index: 1; width: 50; height: auto; position: fixed; top: 10; left: 10;"/></a><br />
+    <div id="pics" />
+  </div>
+</body>
