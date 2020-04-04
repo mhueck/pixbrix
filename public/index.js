@@ -98,8 +98,8 @@ function render(width, pics, screenRatio) {
       if( picwidth > 390)
         resolution = 400;
       html += '<div style="float: left; overflow: hidden; margin-left: 5; width: '+picwidth+'; height: '+Math.round(rowHeight)+';" >';
-      html += '<a href="/pic/'+pics[imageCounter+i]._id+'" rel="gallery-1">';
-      html += '<img src="/thumb/'+resolution+'px/'+pics[imageCounter+i]._id+'" width="'+(picwidth+2)+'" class="slide"/>';
+      html += '<a href="/pic/'+pics[imageCounter+i].myid+'" rel="gallery-1">';
+      html += '<img src="/thumb/'+resolution+'px/'+pics[imageCounter+i].myid+'" width="'+(picwidth+2)+'" class="slide"/>';
       html += '</a>';
       html += '</div>\n';
     }

@@ -28,7 +28,7 @@ function getPics(path, recursive) {
 }
 
 function processImage(imageLocation, ondonecallback) {
-    db.ImageData.findOne({'_id': imageLocation}, function(err, imageData) {
+    db.ImageData.findOne({'myid': imageLocation}, function(err, imageData) {
        if(err) {
            console.log("Error when trying to access imagedata: "+err);
            ondonecallback();
@@ -70,7 +70,7 @@ function processImage(imageLocation, ondonecallback) {
                         if( imageLocation.lastIndexOf("/") != -1 )
                             path = imageLocation.substring(0, imageLocation.lastIndexOf("/"));
                         imageData = db.ImageData({
-                            _id: imageLocation,
+                            'myid': imageLocation,
                             'path': path,
                             'height': height,
                             'width': width,

@@ -10,7 +10,7 @@ fs.mkdirParent = function(dirPath, mode, callback) {
   //Call the standard fs.mkdir
   fs.mkdir(dirPath, mode, function(error) {
     //When it fail in this way, do the custom steps
-  if (error && error.errno === 34) {
+  if (error && error.errno ) {
       //Create all the parents recursively
       fs.mkdirParent(path.dirname(dirPath), mode, null);
       //And then the directory

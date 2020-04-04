@@ -6,13 +6,13 @@
     "start": "node ./bin/www --debug"
   },
   "dependencies": {
+    "async": "*",
     "debug": "~2.1.1",
-    "express": "~4.11.1",
-    "morgan": "~1.5.1",
-    "serve-favicon": "~2.2.0",
+    "express": "^4.17.1",
+    "gm": "*",
     "mongodb": "*",
     "mongoose": "*",
-    "gm": "*",
-    "async": "*"
+    "morgan": "^1.10.0",
+    "serve-favicon": "^2.5.0"
   }
 }

@@ -3,7 +3,7 @@ mongoose.connect('mongodb://localhost/pics');
 
 // auth token
 var imageDataSchema = mongoose.Schema({
-    _id: {
+    myid: {
         type: String,
         unique: true,
         required: true,
