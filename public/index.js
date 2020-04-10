@@ -64,7 +64,9 @@ function render(width, pics, screenRatio) {
   if( screenRatio && screenRatio < 1 )
   	possiblePicsPerRows = [ 2, 2, 3, 3, 3, 4];
   var imageCounter = 0;
+  var rowCounter = 0;
   while(true) {
+    rowCounter++;
     // random number of pics per row
     var picsPerRow = possiblePicsPerRows[Math.round(possiblePicsPerRows.length * Math.random() - 0.5)];
     if( imageCounter + picsPerRow + 1 == pics.length ) {
@@ -97,9 +99,10 @@ function render(width, pics, screenRatio) {
         resolution = 300;
       if( picwidth > 390)
         resolution = 400;
+      var thumbName = "/thumb/"+resolution+"px/"+pics[imageCounter+i].myid;
       html += '<div style="float: left; overflow: hidden; margin-left: 5; width: '+picwidth+'; height: '+Math.round(rowHeight)+';" >';
       html += '<a href="/pic/'+pics[imageCounter+i].myid+'" rel="gallery-1">';
-      html += '<img src="/thumb/'+resolution+'px/'+pics[imageCounter+i].myid+'" width="'+(picwidth+2)+'" class="slide"/>';
+      html += '<img src="'+(rowCounter<10?thumbName:"1x1.gif")+'" data-src="'+thumbName+'" width="'+(picwidth+2)+'" class="slide"/>';
       html += '</a>';
       html += '</div>\n';
     }

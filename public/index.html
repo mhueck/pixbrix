@@ -36,6 +36,40 @@
 
 
 <script>
+let handleIntersect = (entries, observer) => {
+  entries.forEach(entry => {
+    const image = entry.target
+    if (entry.isIntersecting) {
+        image.src = image.dataset.src;
+    }
+    else {
+        image.src = "1x1.gif";
+    }
+  });
+};
+let observer;
+function createObserver() {
+  let options = {
+    root: null,
+    rootMargin: "200px",
+    threshold: 0
+  };
+  observer = new IntersectionObserver(handleIntersect, options);
+  const arr = document.querySelectorAll('img.slide')
+    arr.forEach((v) => {
+        observer.observe(v);
+    });
+}
+function deleteObserver() {
+    if( ! observer ) {
+        return;
+    }
+    const arr = document.querySelectorAll('img.slide')
+    arr.forEach((v) => {
+        observer.unobserve(v);
+    });
+}
+
 //  $(function(){
 function initSlideShow() {
   var $container = $('#fullscreenSlideshowContainer');
@@ -113,7 +147,9 @@ function show(path) {
         dataType: 'json'
     })
     .done(function(data, textStatus, jqXHR) {
+	deleteObserver();
         $('#pics').html(render(window.innerWidth-15-getScrollbarWidth(), jqXHR.responseJSON, window.outerWidth/window.outerHeight));
+	createObserver();
         initSlideShow();
         window.scrollTo(0, 0);
     });

@@ -48,7 +48,24 @@ function processImage(imageLocation, ondonecallback) {
                         var height = data['size']['height'];
                         var width = data['size']['width'];
                         var dateTime;
-                        if (data['Profile-EXIF']) {
+                        if (data['Properties']) {
+                           if (data['Properties']['exif:DateTime']) {
+                                dateTime = Date.parse(data['Properties']['exif:DateTime'].replace(':', '-').replace(':', '-').replace(' ', 'T'));
+                           }
+				else if (data['Properties']['exif:DateTimeOriginal']) {
+                                dateTime = Date.parse(data['Properties']['exif:DateTimeOriginal'].replace(':', '-').replace(':', '-').replace(' ', 'T'));
+                           }
+                            else if (data['Properties']['exif:GPSTimeStamp'] && data['Properties']['exif:GPSDateStamp']) {
+                                var time = data['Properties']['exif:GPSTimeStamp'].replace(/\/1/g, '').replace(/,/g, ':');
+                                if( time.indexOf(":") == 1 )
+                                  time = '0'+time;
+                                if( time.indexOf(":", 3) == 4 )
+                                  time = time.substr(0,3)+'0'+time.substring(3);
+                                if( time.length == 7 )
+                                  time = time.substr(0,6)+'0'+time.substring(6);
+                                dateTime = Date.parse(data['Properties']['exif:GPSDateStamp'].replace(/:/g, '-') + 'T' + time);
+                            }
+                        }else if (data['Profile-EXIF']) {
                             if (data['Profile-EXIF']['Date Time']) {
                                 dateTime = Date.parse(data['Profile-EXIF']['Date Time'].replace(':', '-').replace(':', '-').replace(' ', 'T'));
                             }
@@ -74,11 +91,11 @@ function processImage(imageLocation, ondonecallback) {
                             'path': path,
                             'height': height,
                             'width': width,
-                            'created': dateTime
+                            'created': dateTime?dateTime:null
                         });
                         imageData.save(function(err) {
                             if (err) {
-                                console.log("Could not store image data to DB: " + err);
+                                console.log("Could not store image "+imageLocation+" data to DB: " + err);
                             }
                             else {
                                 console.log("Created image data for " + imageLocation);
