@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "async": "*",
-    "debug": "~2.1.1",
+    "debug": "~4.1.1",
     "express": "^4.17.1",
     "gm": "*",
     "mongodb": "*",
