@@ -37,12 +37,15 @@
 
 <script>
 let handleIntersect = (entries, observer) => {
+	console.log("observer triggered for: "+entries.length);
   entries.forEach(entry => {
     const image = entry.target
     if (entry.isIntersecting) {
+	    console.log("enable "+image.dataset.src);
         image.src = image.dataset.src;
     }
     else {
+	    console.log("disable "+image.dataset.src);
         image.src = "1x1.gif";
     }
   });
