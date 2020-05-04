@@ -136,6 +136,25 @@
         if (!("$img" in newSlide)) {
           isLoading = true;
           $container.trigger("startLoading");
+          if (newSlide.video) {
+            newSlide.$img = $(' <video width="100%" height="100%" autoplay class="slide"><source src="'+newSlide.image+'" type="video/mp4"></video>')
+            .hide()
+            // on load get the images dimensions and show it
+            .load(function(){
+              isLoading = false;
+              $container.trigger("stopLoading");
+              //updateSlideSize(newSlide);
+              changeSlide(oldSlide, newSlide);
+            })
+            .error(function(){
+              isLoading = false;
+              newSlide.error = true;
+              $container
+                .trigger("stopLoading")
+                .trigger("error", newSlide);
+            });
+          }
+          else {
           newSlide.$img = $('<img class="slide">')
             .css({
               "position"    : "absolute",
@@ -158,6 +177,7 @@
                 .trigger("error", newSlide);
             })
             .attr("src", newSlide.image);
+          }
           $container.append(newSlide.$img);
         } else {
           changeSlide(oldSlide, newSlide);
@@ -328,7 +348,8 @@
       var slide = {
         image: link.href,
         title: link.title,
-        rel: link.rel
+        rel: link.rel,
+        video: link.href.endsWith(".mp4") || link.href.endsWith(".MP4")
       };
       slide.data = $.extend({}, $(this).data(), $(link).data());
       slideshows[slide.rel] = slideshows[slide.rel] || [];

@@ -96,13 +96,14 @@ function render(width, pics, screenRatio) {
       actualWidth += picwidth;
       var resolution = 200;
       if(picwidth > 250 )
-        resolution = 300;
-      if( picwidth > 390)
         resolution = 400;
-      var thumbName = "/thumb/"+resolution+"px/"+pics[imageCounter+i].myid;
+      if( picwidth > 450)
+        resolution = 600;
+      isvideo = pics[imageCounter+i].video;
+      var thumbName = "/thumb/"+resolution+"px/"+pics[imageCounter+i].myid+(isvideo?".jpg":"");
       html += '<div style="float: left; overflow: hidden; margin-left: 5; width: '+picwidth+'; height: '+Math.round(rowHeight)+';" >';
       html += '<a href="/pic/'+pics[imageCounter+i].myid+'" rel="gallery-1">';
-      html += '<img src="'+(rowCounter<10?thumbName:"1x1.gif")+'" data-src="'+thumbName+'" width="'+(picwidth+2)+'" class="slide"/>';
+      html += '<img src="'+(rowCounter<10?thumbName:"1x1.gif")+'" data-src="'+thumbName+'" data-type="'+(isvideo?"video":"image")+'" width="'+(picwidth+2)+'" class="slide"/>';
       html += '</a>';
       html += '</div>\n';
     }
